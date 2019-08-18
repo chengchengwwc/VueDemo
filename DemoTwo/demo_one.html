@@ -35,7 +35,41 @@
             <li v-for="(value,key,index) in per_dict">{{value}}--{{key}}--{{index}}</li>
         </ul>
         <input type="text" v-model="msg">
+        <!-- 数组语法  -->
+        <p :class="{active:a,left:b}">ddfdf</p>
+        <p :class="obj">dfdfd</p>
+        <p :class="[left,active]">dfdfdfd</p>
+        <!-- 对象语法  -->
+        <p :style="{fontSize:m,color:n}">dfdfdf</p>
 
+        <p :class="{active:isActive}">dfdfdf</p>
+        <button @click="isActive=!isActive">butt</button>
+
+        <input :value="message" @input="message=$event.target.value">
+        <!-- v-model 绑定其他元素  
+            1 多行输入：textarea 内容区域的字符是无效的
+            2 复选框checkbox
+            2.1 一个复选框 v-model=bool
+            2.2 多个复选框 v-model = []
+            3   下拉框
+        -->
+        <textarea v-model="message"></textarea>
+        <input type="checkbox" v-model="check">
+        <select v-model="DDD">
+            <option>ddd</option>
+            <option>ddd</option>
+            <option>ddd</option>
+        </select>
+        <p v-cloak>{{message}}</p>
+        <!-- 过滤器 -->
+        <p>{{message | toUpper}}</p>
+        
+        <!--
+            获取焦点，没有相应的指令 在Vue中操作DOM元素
+            1 给要操作的DOM元素设置ref属性值
+            2 在选项mounted 方法中获取要操作的dom元素this.$refs.ref属性值 
+          -->
+        <input type="text" ref="text">
 
     </div>
     <script src="vue.js"></script>
@@ -50,7 +84,29 @@
         // v-bind  作用绑定标标签的任何属性
         //场景当标签的属性值不确定时候
         // v-model绑定表单元素 v-model 绑定的是value值， 当输入框中的value的值进行变化的时候，对应的数据也会进行变化
+        // v-cloak 解决插值表达式页面闪烁的问题,在style样式中赋值
+        // v-once 只渲染一次属性
+        //创建全局过滤器
+        // 在newVue之前， 步骤 1 在newVue之前  vue.filter(过滤器名称，function(){})
+        // 2 在过滤器函数中实现具体的处理逻辑
+        // 3 在视图中使用过滤器
 
+        Vue.filter("toUpper",function(v){
+            v.charAt(0).toUpperCase()
+            return v
+        })
+        // 全局自定义指令
+        // 1 在new Vue 之前 定义 Vue.directive(指令名，{inserted(er){}})
+        // 2 在inserted(el){自定义指令的具体功能}
+        // 3 在视图中v-指令名 使用指令
+        Vue.directive("foucs",{
+            inserted(el){
+                // el: 指的是该自定义指令的调用者
+                el.focus()
+
+            }
+
+        })
 
 
         var vm = new Vue({
@@ -60,6 +116,18 @@
                       // 值可以为DOM元素
                       // 不能让el直接管理HTML或是BODY
             data:{
+                check:true,
+                isActive:true,
+                m:'30px',
+                n:red,
+                a:true,
+                b:true,
+                obj:{
+                    a:true,
+                    b:true,
+                },
+                left:"ddfd",
+                active:"XXCX",
                 message:"abc", // data作用:指定/设置 当前Vue管理的数据
                               // data中的数据：可以通过Vue实例对象，属性名，去访问数据
                              //  特点：响应式数据
@@ -82,14 +150,34 @@
             // 不推荐些箭头函数，因为箭头函数不指向VM实例
             methods:{
                 fn1:function(){
-
+                    this.isActive = false
                 },
                 fn2:function(){
 
                 }
+            },
+            //通过选项filters来添加局部的过滤器
+            filters:{
+                // 局部过滤器
+                toUpper(v){
+                    return v.charAt(0).toUpperCase()
+                }
+            },
+            //获取要操作的DOM元素
+            //页面加载完成后会自动被触发
+            mounted(){
+                console.log(this.$refs.text)
+                this.$refs.text.focus()
 
+            },
+            // 计算属性
+            computed:{
+                reverMessage:function(){
+                    return this.message.split('').reverse().join('')
+                }
 
             }
+
 
         })
         console.log(vm.data.message)

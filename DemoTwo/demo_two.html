@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        {{message}}
+        {{count}}
+        {{count++}}
+        {{count+100}}
+        {{count>18?'chengnian':'weichengnian'}}
+        <button @click="fn1()">BUTTION</button>
+        <button v-on:click="fn1()">BUTTION1</button>
+        <p v-text='message'>dfdfdf</p>
+        <!-- $event 代表当前的事件对象  -->
+        <button v-on:click="fn1($event)">BUTTION1</button>
+         <!-- once 只执行一次  -->
+        <button @click.once="fn1()">BUTTION</button>
+        <ul>
+            <li v-for="item in message_list">{{item}}</li>
+        </ul>
+        
+        <ul>
+            <li v-for="(item,index) in message_list">{{item}}---{{index}}</li>
+        </ul>
+
+        <ul>
+            <li v-for="item in per_dict">{{item}}</li>
+        </ul>
+        <ul>
+            <li v-for="(value,key,index) in per_dict">{{value}}--{{key}}--{{index}}</li>
+        </ul>
+        <input type="text" v-model="msg">
+
+
+    </div>
+    <script src="vue.js"></script>
+    <script>
+        //指令
+        //作用 增强了HTML的标签功能
+        //所有指令都是v-开头
+        //所有指令代码位置 标签的开始位置
+        // 所有指令都是取代之前的DOM操作
+        // v-text  作用：替换标签的全部内容
+        // v-for 列表渲染 语法 v-for="item in 容器"
+        // v-bind  作用绑定标标签的任何属性
+        //场景当标签的属性值不确定时候
+        // v-model绑定表单元素 v-model 绑定的是value值， 当输入框中的value的值进行变化的时候，对应的数据也会进行变化
+
+
+
+        var vm = new Vue({
+            el:"#app", // Vue实例
+                      // 值可以为css 选择器
+                      // 值可以为其他选择器
+                      // 值可以为DOM元素
+                      // 不能让el直接管理HTML或是BODY
+            data:{
+                message:"abc", // data作用:指定/设置 当前Vue管理的数据
+                              // data中的数据：可以通过Vue实例对象，属性名，去访问数据
+                             //  特点：响应式数据
+                count:100,
+                message_list:["DD","BBB","CCCC"],
+                per_dict:{
+                    id:1,
+                    name:"XXX",
+                    age:20,
+                    size:19,
+                    gender:"DDDD"
+                }
+
+
+            },
+            // method:写方法
+            // 通过双扩号表达式来运行这个方法
+            // 通过vm对象，方法去调用这个方法
+            // 方法中的this 是指当前vue的实例对象
+            // 不推荐些箭头函数，因为箭头函数不指向VM实例
+            methods:{
+                fn1:function(){
+
+                },
+                fn2:function(){
+
+                }
+
+
+            }
+
+        })
+        console.log(vm.data.message)
+    </script>
+
+
+</body>
+</html>
