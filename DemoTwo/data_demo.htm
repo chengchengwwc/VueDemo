@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        {{message}}
+    </div>
+    <script src="vue.js"></script>
+    <script>
+        new Vue({
+            el:"#app" // Vue实例
+                              // 值可以为css 选择器
+                              // 值可以为其他选择器
+                              // 值可以为DOM元素
+                              // 不能让el直接管理HTML或是BODY
+        })
+    </script>
+</body>
+</html>

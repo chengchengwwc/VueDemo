@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        #app {
+            width: 600px;
+            margin: 10px auto;
+        }
+        
+        .tb {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        .tb th {
+            background-color: #0094ff;
+            color: white;
+        }
+        
+        .tb td,
+        .tb th {
+            padding: 5px;
+            border: 1px solid black;
+            text-align: center;
+        }
+        
+        .add {
+            padding: 5px;
+            border: 1px solid black;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="add">
+            品牌名称:
+            <input type="text" v-model="itemname">
+            <input type="button" value="添加" @click="addItem()">
+        </div>
+
+        <div class="add">
+            品牌名称:
+            <input type="text" placeholder="请输入搜索条件">
+        </div>
+
+        <div>
+            <table class="tb">
+                <tr>
+                    <th>编号</th>
+                    <th>品牌名称</th>
+                    <th>创立时间</th>
+                    <th>操作</th>
+                </tr>
+                <tr v-for="(v,i) in list">
+                    <td>{{i+1}}</td>
+                    <td>{{v.name}}</td>
+                    <td>{{v.date}}</td>
+                    <td>
+                        <a href="#" @click.prevent="deleItem(i)">删除</a>
+                    </td>
+                </tr>
+                <tr v-if="list.length===0">
+                    <td colspan="4">没有品牌数据</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="./vue.js"></script>
+    <script>
+        // 模拟的是ajax返回的数据
+        var list = [{
+            name: 'TCL',
+            date: new Date()
+        }, {
+            name: 'XXOO',
+            date: new Date()
+        }, {
+            name: '娃娃',
+            date: new Date()
+        }];
+
+        new Vue({
+            el: '#app',
+            data: {
+                // ES6 当key和value名一样 只写一个单词
+                // list:list
+                list,
+                // 输入框要绑定的数据
+                itemname: ''
+            },
+            methods: {
+                // 删除商品
+                deleItem(index) {
+                    // splice(索引,长度1)
+                    if (confirm('Sure?')) {
+                        this.list.splice(index, 1)
+                    }
+                },
+                // 添加商品
+                addItem() {
+                    this.list.unshift({
+                        name: this.itemname,
+                        date: new Date()
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
+
+<!-- 
+一. 列表渲染
+1. 找到重复出现的标签结构
+2. 确定要用的指令 v-for列表渲染 (v,i) in list数组
+3. 在data中提供一个数组list
+4. 在视图中 通过{{}}使用数据
+
+二. 处理无数据时的渲染
+1. 找到条件渲染的标签
+2. 确定要用的指令 v-if="list.length===0"
+
+三. 添加商品
+1. 找到输入框 -> v-model="data中的数据"
+2. 在data中提供一个itemname数据
+3. 找到添加按钮 绑定事件 @click="addItem()"
+4. 在methods中提供addItem方法
+5. 在addItem()中 向list数组中添加元素
+
+四. 删除商品
+1. 找到删除按钮 @click="deleItem()"
+2. 在methods提供deleItem()
+3. 在deleItem()中 从list中移除当前元素
+
+ -->
