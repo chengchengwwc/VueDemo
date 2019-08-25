@@ -1,100 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <title></title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        #app {
+            width: 600px;
+            margin: 10px auto;
+        }
+        
+        .tb {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        .tb th {
+            background-color: #0094ff;
+            color: white;
+        }
+        
+        .tb td,
+        .tb th {
+            padding: 5px;
+            border: 1px solid black;
+            text-align: center;
+        }
+        
+        .add {
+            padding: 5px;
+            border: 1px solid black;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
+
 <body>
     <div id="app">
-        {{message}}
-        {{count}}
-        {{count++}}
-        {{count+100}}
-        {{count>18?'chengnian':'weichengnian'}}
-        <button @click="fn1()">BUTTION</button>
-        <button v-on:click="fn1()">BUTTION1</button>
-        <p v-text='message'>dfdfdf</p>
-        <!-- $event 代表当前的事件对象  -->
-        <button v-on:click="fn1($event)">BUTTION1</button>
-         <!-- once 只执行一次  -->
-        <button @click.once="fn1()">BUTTION</button>
-        <ul>
-            <li v-for="item in message_list">{{item}}</li>
-        </ul>
-        
-        <ul>
-            <li v-for="(item,index) in message_list">{{item}}---{{index}}</li>
-        </ul>
+        <div class="add">
+            品牌名称:
+            <input type="text" v-model="name">
+            <input :disabled="name.length===0" type="button" value="添加" @click="addItem">
+        </div>
 
-        <ul>
-            <li v-for="item in per_dict">{{item}}</li>
-        </ul>
-        <ul>
-            <li v-for="(value,key,index) in per_dict">{{value}}--{{key}}--{{index}}</li>
-        </ul>
-        <input type="text" v-model="msg">
+        <div class="add">
+            品牌名称:
+            <input type="text" placeholder="请输入搜索条件" v-model="searchVal">
+        </div>
 
-
+        <div>
+            <table class="tb">
+                <tr>
+                    <th>编号</th>
+                    <th>品牌名称</th>
+                    <th>创立时间</th>
+                    <th>操作</th>
+                </tr>
+                <tr v-for="(item,index) in newList" :key="index">
+                    <td>{{index+1}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.date}}</td>
+                    <td>
+                        <a href="#" @click.prevent="deleItem(index)">删除</a>
+                    </td>
+                </tr>
+                <!-- 
+                    如果list中没数据, 就显示下面的tr
+                    如果list中有数据,就不显示下面的tr
+                    -->
+                <tr v-if="list.length===0">
+                    <td colspan="4">没有品牌数据</td>
+                </tr>
+            </table>
+        </div>
     </div>
-    <script src="vue.js"></script>
+    <script src="./vue.js"></script>
     <script>
-        //指令
-        //作用 增强了HTML的标签功能
-        //所有指令都是v-开头
-        //所有指令代码位置 标签的开始位置
-        // 所有指令都是取代之前的DOM操作
-        // v-text  作用：替换标签的全部内容
-        // v-for 列表渲染 语法 v-for="item in 容器"
-        // v-bind  作用绑定标标签的任何属性
-        //场景当标签的属性值不确定时候
-        // v-model绑定表单元素 v-model 绑定的是value值， 当输入框中的value的值进行变化的时候，对应的数据也会进行变化
+        // json-server 将一个json文件变为一个接口文件
+        //axios 发送网络请求
+        //八种跨域解决方案
+        // 1 jsonnp: srcipt src="" -> callback()
+        // 接口需要支持jsonnp
+        // 2 服务端处理
+        // 3 iframe src="xxx.html" + location.hash
+        // 4 设置代理
+        // 5 iframe + window,name
 
 
 
-        var vm = new Vue({
-            el:"#app", // Vue实例
-                      // 值可以为css 选择器
-                      // 值可以为其他选择器
-                      // 值可以为DOM元素
-                      // 不能让el直接管理HTML或是BODY
-            data:{
-                message:"abc", // data作用:指定/设置 当前Vue管理的数据
-                              // data中的数据：可以通过Vue实例对象，属性名，去访问数据
-                             //  特点：响应式数据
-                count:100,
-                message_list:["DD","BBB","CCCC"],
-                per_dict:{
-                    id:1,
-                    name:"XXX",
-                    age:20,
-                    size:19,
-                    gender:"DDDD"
-                }
 
+
+        new Vue({
+            el: '#app',
+            data: {
+                // 模拟ajax请求返回的数据
+                list: [{
+                    name: 'TCL',
+                    date: new Date()
+                }, {
+                    name: '小米',
+                    date: new Date()
+                }, {
+                    name: '苹果',
+                    date: new Date()
+                }],
+                // 要添加的商品名称
+                name: '',
+                searchVal : ''
+            },
+            computed:{
+                //通过v-model 绑定searchVal来实现页面数据检索
+                newList(){
+                    return this.list.filter((item)=>{
+    
+                        if(this.searchVal != null){
+                            return item.name.startsWith(this.searchVal)
+                        }else{
+                            return item
+                        }
+                    })
+                },
 
             },
-            // method:写方法
-            // 通过双扩号表达式来运行这个方法
-            // 通过vm对象，方法去调用这个方法
-            // 方法中的this 是指当前vue的实例对象
-            // 不推荐些箭头函数，因为箭头函数不指向VM实例
-            methods:{
-                fn1:function(){
 
+
+            methods: {
+                // 删除商品
+                deleItem: function(index) {
+                    // console.log(index);
+                    // console.log('deleItem被触发了');
+                    // 要从list数组中删除当前的tr标签对应的数据
+                    // 提示框
+                    if (confirm('是否删除?')) {
+                        this.list.splice(index, 1);
+                    }
                 },
-                fn2:function(){
-
+                // 添加商品
+                addItem: function() {
+                    // 向list数组中添加商品 
+                    this.list.unshift({
+                        name: this.name,
+                        date: new Date()
+                    });
+                    // 清空商品名称的输入框
+                    this.name = '';
                 }
-
-
             }
-
-        })
-        console.log(vm.data.message)
+        });
     </script>
 
-
 </body>
+
 </html>
+<!-- 
+    1 渲染表格
+        把假数据渲染到页面的相应位置
+        v-for指令遍历data中的某个数组
+    2 处理无数据时的渲染
+        v-if 如果有数据 就显示
+            如果没数据 就不显示
+    3 删除商品
+       点击删除按钮 删除当前按钮所在的tr标签
+       数据发生变化 -> 使用数据的视图自动发生变化
+       3.1 找到删除按钮 绑定click事件 触发方法
+       3.2 实现删除的方法
+       3.3 从list数组中删除当前这条数据
+    4 添加商品
+        在输入框中输入商品名称 点击添加按钮
+        在商品列表中的顶部渲染添加的商品
+        4.1 给商品名称的输入框绑定data中的name
+        4.2 找到添加商品的按钮,绑定click事件 调用方法
+        4.3 在方法中向list数组里添加商品信息
+    5 细节处理
+        5.1 添加按钮默认不能点击
+            v-bind绑定disabled属性
+        5.2 添加成功后, 清空商品名称的输入框
+        5.3 删除提示框
+-->
