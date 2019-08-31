@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+    <!-- 自定义属性 -->
+    <child-b :a="ddd"></child-b>
+</body>
+<script src="./vue.js"></script>
+<script>
+    Vue.component('child-b',{
+        template:`<div>我是child-b组件</div>`
+    })
+    
+
+
+    //可以把newVue所管理的视图当成是整个项目的根组件
+    //props 选项传值
+    new Vue({
+        el:'#app',
+        data:{
+
+        },
+        methods:{
+
+        },
+        components:{
+            'child-a':{
+                template:`<div>我是child-a组件</div>`
+            }
+        },
+        props:['a']//传值
+    })
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+</html>
