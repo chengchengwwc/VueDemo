@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id='app'>
+        <button @click="isShow = !isShow">按钮</button>
+        <!--
+            1 给希望有过度效果的元素（插入或是移除）外层元素组件 translation
+            2 在生成的类名中添加过度效果
+            3 完善生命周期函数
+
+        -->
+        <transition enter-active-class="animated tada" leave-active-class="animated bounceOutRight">
+            <div v-if="isShow">abcdd</div>
+        </transition>
+    </div>
+
+
+    
+</body>
+<style>
+    .v-enter,.v-leave-to{
+        opacity: 0;
+        left:300px;
+    }
+    .v-enter,.v-leave {
+        opacity: 1;
+        left:0px;
+    }
+    .v-enter-active,.v-leave-active{
+        transition:all 4s;
+    }
+
+
+</style>
+
+
+
+
+<script src="./vue.js"></script>
+<script src="./vue-router.js"></script>
+<script>
+    // created() 操作数据 this.getData()
+    // mounted() 操作数据this.getData()  2 操作DOM元素
+    //
+
+
+
+    new Vue({
+        el:"#app",
+        data:{
+            isShow:true
+        },
+
+    })
+</script>
+
+
+
+</html>

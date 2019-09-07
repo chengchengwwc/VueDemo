@@ -15,6 +15,7 @@
   
 </template>
 <script>
+    // Animate.css的是使用
     import appNav from './components/common/appnav.vue'
     import appSlider from './components/common/appslider.vue'
     import list from './components/common/list.vue'
